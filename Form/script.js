@@ -14,7 +14,7 @@ webserver.get('/form', (req, res) => {
         res.send(
             `
             <h3 style="color: red">Не верно введён логин или пароль</h3>
-            <form method=GET action="http://localhost:3050/form">
+            <form method=GET action="http://178.172.195.18:7480/form">
                 логин: <input type=text name=login value="${req.query.login}"><br />
                 
                 пароль: <input type=text name=password value="${req.query.password}"><br />
@@ -24,7 +24,7 @@ webserver.get('/form', (req, res) => {
         );
     } else {
         res.send(
-            `<form method=GET action="http://localhost:3050/form">
+            `<form method=GET action="http://178.172.195.18:7480/form">
                 логин: <input type=text name=login><br />
                 
                 пароль: <input type=text name=password><br />
