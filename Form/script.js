@@ -4,36 +4,34 @@ const webserver = express();
 
 const port = 7480;
 
+const authentificationErrorMsg = 'Не верно введён логин или пароль';
+
 webserver.get('/form', (req, res) => {
     if (req.query.login && req.query.password) {
-        res.send(
-            `<h3>Ваш логин:  ${req.query.login}</h3>
-             <h3>Ваш пароль:  ${req.query.password}</h3>`
-        );
+        res.send(getSuccessfulPage(req.query));
     } else if (req.query.login === '' || req.query.password === '') {
-        res.send(
-            `
-            <h3 style="color: red">Не верно введён логин или пароль</h3>
-            <form method=GET action="http://178.172.195.18:7480/form">
-                логин: <input type=text name=login value="${req.query.login}"><br />
-                
-                пароль: <input type=text name=password value="${req.query.password}"><br />
-                
-                <input type=submit value="Войти">
-            </form>`
-        );
+        res.send(getFormHtml(req.query, authentificationErrorMsg));
     } else {
-        res.send(
-            `<form method=GET action="http://178.172.195.18:7480/form">
-                логин: <input type=text name=login><br />
-                
-                пароль: <input type=text name=password><br />
-                
-                <input type=submit value="Войти">
-            </form>`
-        );
+        res.send(getFormHtml());
     }
 });
+
+function getFormHtml(data = { login: '', password: '' }, errorMsg = '') {
+    return `
+                <h3 style="color: red">${errorMsg}</h3>
+                <form method=GET action="/form">
+                логин: <input type=text name=login value="${data.login}"><br />
+                
+                пароль: <input type=text name=password value="${data.password}"><br />
+                
+                <input type=submit value="Войти">
+            </form>`
+}
+
+function getSuccessfulPage(data) {
+    return `<h3>Ваш логин:  ${data.login}</h3>
+            <h3>Ваш пароль:  ${data.password}</h3>`
+}
 
 webserver.listen(port, () => {
     console.log("web server running on port " + port);
