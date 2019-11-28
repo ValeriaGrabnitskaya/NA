@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <title>Voting</title>
-    <!-- <script src="Voting/index.js"></script> -->
 </head>
 
 <body onload="firstPageLoad()">
@@ -22,7 +21,7 @@
     <h3>Оцените обучение на курсе 'Архитектера веб-проектов Node.js'</h3>
     <form>
         <div id="variants"></div>
-        <button type=submit onclick="sendVote()">Отправить голос</button>
+        <!-- <button type=submit onclick="sendVote()">Отправить голос</button> -->
     </form>
 </body>
 
@@ -34,9 +33,7 @@
 
     async function getStatistics() {
         const fetchOptions = {
-            headers: {
-                method: "get"
-            }
+            method: "get"
         };
         const response = await fetch('/stat', fetchOptions);
         const data = await response.json();
@@ -54,9 +51,7 @@
 
     async function getVariants() {
         const fetchOptions = {
-            headers: {
-                method: "get"
-            }
+            method: "get"
         };
         const response = await fetch('/variants', fetchOptions);
         const data = await response.json();
@@ -66,15 +61,27 @@
     function createVariantsBlock(response) {
         let variantsBlock = '';
         response.data.forEach((item, index) => {
-            variantsBlock += `<input type="radio" value="${item.value}" />
-                            <label>${item.value}</label>`
+            variantsBlock += `<input type="radio" onclick="sendVote(${item.id})"/>
+                            <label>${item.id}</label>`
         })
         var variantsDiv = document.getElementById('variants');
         variantsDiv.innerHTML = variantsBlock;
     }
 
     async function sendVote(value) {
-
+        const fetchOptions = {
+            method: "post",
+            headers: {
+                'Content-Type': 'text/plain'
+            },
+            body: value
+        };
+        const response = await fetch('/vote', fetchOptions);
+        if (response.ok) {
+            getStatistics();
+        } else {
+            alert("Ошибка HTTP: " + response.status);
+        }
     }
 </script>
 
