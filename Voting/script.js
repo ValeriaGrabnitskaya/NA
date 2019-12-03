@@ -10,13 +10,14 @@ const port = 7480;
 
 webserver.use(express.json());
 webserver.use(bodyParser.text());
+webserver.use(express.static(__dirname));
 
 webserver.options('/vote', (req, res) => {
 
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    res.send(""); // сам ответ на preflight-запрос может быть пустым
+    res.send("");
 });
 
 webserver.get('/main-page', (req, res) => {
@@ -40,7 +41,9 @@ webserver.post('/vote', (req, res) => {
     if (contentType === "text/plain") {
         setAndGetDataFromFile(req.body);
         res.status(200).type('text/plain');
-        res.send();
+        res.send('');
+    } else {
+        res.send.status(500);
     }
 });
 
@@ -53,7 +56,6 @@ function setAndGetDataFromFile(value) {
         }
         return item;
     });
-    console.log(JSON.stringify({"data": newFileContent}))
     fs.writeFileSync("votes.txt", JSON.stringify({"data": newFileContent}));
 }
 
