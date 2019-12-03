@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const { body } = require('express-validator');
 const fs = require('fs');
 
 var path = require('path');
@@ -9,15 +9,7 @@ const webserver = express();
 const port = 7480;
 
 webserver.use(express.json());
-webserver.use(bodyParser.text());
-
-webserver.options('/vote', (req, res) => {
-
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-    res.send(""); // сам ответ на preflight-запрос может быть пустым
-});
+webserver.use(express.urlencoded({ extended: true }));
 
 webserver.get('/main-page', (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'));
@@ -33,19 +25,14 @@ webserver.get('/variants', (req, res) => {
     res.send(fileContent);
 });
 
-webserver.post('/vote', (req, res) => {
-
-    const contentType = req.headers['content-type'];
-
-    if (contentType === "text/plain") {
-        setAndGetDataFromFile(req.body);
-        res.status(200).type('text/plain');
-        res.send();
-    }
+webserver.post('/vote', [body('vote').not().isEmpty()], (req, res) => {
+    setAndGetDataFromFile(req.body);
+    res.status(200);
+    res.send();
 });
 
-function setAndGetDataFromFile(value) {
-    const intValue = parseInt(value);
+function setAndGetDataFromFile(body) {
+    const intValue = parseInt(body.vote);
     let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
     var newFileContent = fileContent.data.map((item) => {
         if (item.id === intValue) {
@@ -53,8 +40,8 @@ function setAndGetDataFromFile(value) {
         }
         return item;
     });
-    console.log(JSON.stringify({"data": newFileContent}))
-    fs.writeFileSync("votes.txt", JSON.stringify({"data": newFileContent}));
+    console.log(JSON.stringify({ "data": newFileContent }))
+    fs.writeFileSync("votes.txt", JSON.stringify({ "data": newFileContent }));
 }
 
 webserver.listen(port, () => {

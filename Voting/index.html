@@ -21,7 +21,7 @@
     <h3>Оцените обучение на курсе 'Архитектера веб-проектов Node.js'</h3>
     <form>
         <div id="variants"></div>
-        <!-- <button type=submit onclick="sendVote()">Отправить голос</button> -->
+        <button type=submit onclick="sendVote()">Отправить голос</button>
     </form>
 </body>
 
@@ -61,7 +61,7 @@
     function createVariantsBlock(response) {
         let variantsBlock = '';
         response.data.forEach((item, index) => {
-            variantsBlock += `<input type="radio" onclick="sendVote(${item.id})"/>
+            variantsBlock += `<input type="radio" value="${item.id}" name="vote"/>
                             <label>${item.id}</label>`
         })
         var variantsDiv = document.getElementById('variants');
@@ -77,11 +77,6 @@
             body: value
         };
         const response = await fetch('/vote', fetchOptions);
-        if (response.ok) {
-            getStatistics();
-        } else {
-            alert("Ошибка HTTP: " + response.status);
-        }
     }
 </script>
 
