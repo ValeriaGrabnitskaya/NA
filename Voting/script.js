@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const fs = require('fs');
 
 var path = require('path');
@@ -47,8 +46,8 @@ webserver.post('/vote', (req, res) => {
     }
 });
 
-function setAndGetDataFromFile(value) {
-    const intValue = parseInt(value);
+function setAndGetDataFromFile(body) {
+    const intValue = parseInt(body.vote);
     let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
     var newFileContent = fileContent.data.map((item) => {
         if (item.id === intValue) {
