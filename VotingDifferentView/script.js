@@ -15,21 +15,28 @@ webserver.use(
     express.static(path.resolve(__dirname, "public"))
 );
 
-// webserver.options('/vote', (req, res) => {
-
-//     res.setHeader("Access-Control-Allow-Origin", "*");
-//     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-//     res.send("");
-// });
-
 webserver.get('/main-page', (req, res) => {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
 webserver.get('/stat', (req, res) => {
-    let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
-    res.send(fileContent);
+    const clientAccept = req.headers.accept;
+
+    if (clientAccept === "application/json") {
+        let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
+        res.setHeader("Content-Type", "application/json");
+        res.send(fileContent);
+    }
+    else if (clientAccept === "application/xml") {
+        let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
+        res.setHeader("Content-Type", "application/xml");
+        res.send(parseToXML(fileContent.data));
+    }
+    else {
+        let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
+        res.setHeader("Content-Type", "text/plain");
+        res.send(parseToText(fileContent.data));
+    }
 });
 
 webserver.get('/variants', (req, res) => {
@@ -59,13 +66,25 @@ function setAndGetDataFromFile(value) {
         }
         return item;
     });
-    fs.writeFileSync("votes.txt", JSON.stringify({"data": newFileContent}));
+    fs.writeFileSync("votes.txt", JSON.stringify({ "data": newFileContent }));
 }
 
-webserver.get('/statXML', (req, res) => {
-    let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
-    res.send(fileContent);
-});
+function parseToXML(dataArray) {
+    var xml = '<data>';
+    dataArray.forEach((item) => {
+        xml += `<value>${item.id}</value><amount>${item.value}</amount>`
+    });
+    xml += '</data>';
+    return xml;
+}
+
+function parseToText(dataArray) {
+    var text = '';
+    dataArray.forEach((item) => {
+        text += `оценка: ${item.id} - количество: ${item.value};</br>`
+    });
+    return text;
+}
 
 webserver.listen(port, () => {
     console.log("web server running on port " + port);
