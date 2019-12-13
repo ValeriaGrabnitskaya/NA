@@ -20,28 +20,9 @@ webserver.get('/main-page', (req, res) => {
 });
 
 webserver.get('/stat', (req, res) => {
-    const clientAccept = req.headers.accept;
-
     let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
     res.setHeader("Content-Type", "application/json");
     res.send(fileContent);
-
-    // if (clientAccept === "application/json") {
-    //     let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
-    //     res.setHeader("Content-Type", "application/json");
-    //     res.send(fileContent);
-    // }
-    // else if (clientAccept === "application/xml") {
-    //     let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
-    //     res.setHeader("Content-Type", "application/xml");
-    //     res.send(parseToXML(fileContent.data));
-    // }
-    // else {
-    //     let fileContent = JSON.parse(fs.readFileSync("votes.txt", "utf8"));
-    //     res.setHeader("Content-Type", "text/plain");
-    //     // res.setHeader("Cache-Control","public, max-age=0"); 
-    //     res.send(parseToText(fileContent.data));
-    // }
 });
 
 webserver.get('/statXML', (req, res) => {
