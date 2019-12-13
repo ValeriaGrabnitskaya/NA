@@ -4,7 +4,7 @@
   "description": "Node.js web projects architecture",
   "main": "index.js",
   "scripts": {
-    "build": "nodemon script.js"
+    "build": "node script.js &"
   },
   "keywords": [],
   "license": "ISC",
