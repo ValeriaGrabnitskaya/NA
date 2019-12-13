@@ -11,6 +11,7 @@ function firstPageLoad() {
 
 async function getStatistics() {
     const fetchOptions = {
+        method: "get",
         headers: {
             'Accept': 'application/json'
         }
@@ -30,11 +31,12 @@ function createStatisticsBlock(response) {
 
 async function getStatisticsXML() {
     const fetchOptions = {
+        method: "get",
         headers: {
             'Accept': 'application/xml'
         }
     };
-    const response = await fetch('/stat', fetchOptions);
+    const response = await fetch('/statXML', fetchOptions);
     const xmlStr = await response.text();
     const data=parseXml(xmlStr);
     innerHTMLData('statisticsXML', JSON.stringify(data));
@@ -42,22 +44,24 @@ async function getStatisticsXML() {
 
 async function getStatisticsJSON() {
     const fetchOptions = {
+        method: "get",
         headers: {
             'Accept': 'application/json'
         }
     };
-    const response = await fetch('/stat', fetchOptions);
+    const response = await fetch('/statJSON', fetchOptions);
     const data = await response.json();
     innerHTMLData('statisticsJSON', JSON.stringify(data));
 }
 
 async function getStatisticsText() {
     const fetchOptions = {
+        method: "get",
         headers: {
             'Accept': 'text/plain'
         }
     };
-    const response = await fetch('/stat', fetchOptions);
+    const response = await fetch('/statText', fetchOptions);
     const data = await response.text();
     innerHTMLData('statisticsText', data);
 }
