@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Postman</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script src="index.js"></script>
+</head>
+
+<body>
+    <div id="requestBlock"></div>
+    <form class="request-block">
+        <div>
+            <input type="text" placeholder="Введите метод запроса" id="method" />
+            <input type="text" placeholder="Введите url запроса" id="url"/>
+            <input type="button" onclick="submitForm()" value="Сохранить" />
+        </div>
+        <br>
+        <div>
+            <h3>Параметры</h3>
+            <div>
+                <input type="text" placeholder="Ключ" id="keyParam1"/>
+                <input type="text" placeholder="Значение" id="valueParam1"/>
+            </div>
+            <div>
+                <input type="text" placeholder="Ключ" id="keyParam2"/>
+                <input type="text" placeholder="Значение"id="valueParam2" />
+            </div>
+        </div>
+        <br>
+        <div>
+            <label>Content-type</label>
+            <input type="text" placeholder="Введите формат тела запроса" id="contentType"/>
+        </div>
+        <div>
+            <h3>Тело запроса</h3>
+            <div>
+                <input type="radio" value="" id="urlencoded"/>
+                <label>application/x-www-form-urlencoded</label>
+                <input type="radio" value="" id="formData"/>
+                <label>multipart/form-data</label>
+            </div>
+            <br>
+            <div>
+                <input type="text" placeholder="Ключ" id="keyBody1" />
+                <input type="text" placeholder="Значение" id="valueBody1" />
+            </div>
+            <div>
+                <input type="text" placeholder="Ключ" id="keyBody2" />
+                <input type="text" placeholder="Значение" id="valueBody2" />
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>
