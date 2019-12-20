@@ -8,40 +8,48 @@
     <script src="index.js"></script>
 </head>
 
-<body>
-    <div id="requestBlock"></div>
+<body onload="firstPageLoad()">
+    <table>
+        <caption>Запросы</caption>
+        <tr>
+            <th>Метод</th>
+            <th>Урл</th>
+            <th>Действие</th>
+        </tr>
+        <tbody id="requestBlock"></tbody>
+    </table>
+    <br>
+    <hr>
+    <br>
     <form class="request-block">
         <div>
-            <input type="text" placeholder="Введите метод запроса" id="method" />
-            <input type="text" placeholder="Введите url запроса" id="url"/>
+            <select id="method">
+                <option value="" disabled="disabled" selected="selected">Введите метод запроса</option>
+                <option value="1">POST</option>
+                <option value="2">GET</option>
+            </select>
+            <input type="text" placeholder="Введите url запроса" id="url" />
             <input type="button" onclick="submitForm()" value="Сохранить" />
         </div>
         <br>
         <div>
             <h3>Параметры</h3>
             <div>
-                <input type="text" placeholder="Ключ" id="keyParam1"/>
-                <input type="text" placeholder="Значение" id="valueParam1"/>
+                <input type="text" placeholder="Ключ" id="keyParam1" />
+                <input type="text" placeholder="Значение" id="valueParam1" />
             </div>
             <div>
-                <input type="text" placeholder="Ключ" id="keyParam2"/>
-                <input type="text" placeholder="Значение"id="valueParam2" />
+                <input type="text" placeholder="Ключ" id="keyParam2" />
+                <input type="text" placeholder="Значение" id="valueParam2" />
             </div>
         </div>
         <br>
         <div>
             <label>Content-type</label>
-            <input type="text" placeholder="Введите формат тела запроса" id="contentType"/>
+            <input type="text" placeholder="Введите формат тела запроса" id="contentType" />
         </div>
         <div>
             <h3>Тело запроса</h3>
-            <div>
-                <input type="radio" value="" id="urlencoded"/>
-                <label>application/x-www-form-urlencoded</label>
-                <input type="radio" value="" id="formData"/>
-                <label>multipart/form-data</label>
-            </div>
-            <br>
             <div>
                 <input type="text" placeholder="Ключ" id="keyBody1" />
                 <input type="text" placeholder="Значение" id="valueBody1" />

@@ -1,18 +1,19 @@
 {
     "data": [
         {
-            "method": "1",
-            "url": "1",
-            "keyParam1": "1",
-            "valueParam1": "1",
-            "keyParam2": "1",
-            "valueParam2": "1",
+            "methodId": "2",
+            "url": "getUrl",
+            "keyParam1": "",
+            "valueParam1": "",
+            "keyParam2": "",
+            "valueParam2": "",
             "contentType": "",
             "keyBody1": "",
             "valueBody1": "",
             "keyBody2": "",
             "valueBody2": "",
-            "id": 0
+            "id": 0.7904556045928812,
+            "methodName": "GET"
         }
     ]
 }
