@@ -8,6 +8,8 @@ const webserver = express();
 
 const port = 7480;
 
+let key = 0;
+
 webserver.use(express.json());
 webserver.use(bodyParser.text());
 webserver.use(express.urlencoded({ extended: true }));
@@ -21,13 +23,17 @@ webserver.get('/main-page', (req, res) => {
 });
 
 webserver.post('/saveRequestData', (req, res) => {
-    setAndGetDataFromFile(req.body);
+    let fileContent = JSON.parse(fs.readFileSync("requsts-data.json", "utf8"));
+    var parsedData = JSON.parse(req.body);
+    fileContent.data.push(setId(parsedData))
+    fs.writeFileSync("requsts-data.json", JSON.stringify(fileContent));
+    res.send(fileContent);
 });
 
-function setAndGetDataFromFile(data) {
-    let fileContent = JSON.parse(fs.readFileSync("requsts-data.json", "utf8"));
-    fileContent.data.push(JSON.parse(data))
-    fs.writeFileSync("requsts-data.json", JSON.stringify(fileContent));
+function setId(parsedData) {
+    parsedData.id = key;
+    key += 1;
+    return parsedData;
 }
 
 webserver.listen(port, () => {

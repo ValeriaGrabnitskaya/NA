@@ -5,6 +5,8 @@ async function submitForm() {
     };
     console.log(JSON.stringify(this.getFormData()))
     const response = await fetch('/saveRequestData', fetchOptions);
+    const data = await response.json();
+    buildRequestBlock(data);
 }
 
 function getFormData() {
@@ -21,4 +23,13 @@ function getFormData() {
         keyBody2: document.getElementById('keyBody2').value,
         valueBody2: document.getElementById('valueBody2').value
     }
+}
+
+function buildRequestBlock(response) {
+    let requestBlock = '';
+    response.data.forEach((item, index) => {
+        requestBlock += `<div><div>${item.url}</div><div>${item.method}</div><div><input type="button" click="executeService(${item.id})"/></div></div>`
+    })
+    var requestDiv = document.getElementById('requestBlock');
+    requestDiv.innerHTML = requestBlock;
 }
