@@ -32,7 +32,7 @@ async function submitForm() {
         body: JSON.stringify(this.getFormData())
     };
     console.log(JSON.stringify(this.getFormData()))
-    const response = await fetch('/saveRequestData', fetchOptions);
+    const response = await fetch('/save-request-data', fetchOptions);
     if(response.status = 200) {
         getRequestsList();
         resetForm();
@@ -65,10 +65,18 @@ function buildRequestBlock(response) {
 }
 
 async function executeService(requestId) {
-    console.log(requestId);
     const fetchOptions = {
         method: "post",
         body: JSON.stringify({requestId: requestId})
     };
     const response = await fetch('/run-request', fetchOptions);
+    const data = await response.text();
+    setDataToForm(JSON.parse(data));
+}
+
+function setDataToForm(data) {
+    document.getElementById('method').value = data.methodId;
+    document.getElementById('url').value = data.url;
+    document.getElementById('status').value = data.status;
+    document.getElementById('contentType').value = data.contentType;
 }
