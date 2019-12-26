@@ -14,6 +14,7 @@ async function getRequestsList() {
 function resetForm() {
     document.getElementById('methodId').value = '',
         document.getElementById('url').value = '',
+        document.getElementById('status').value = '',
         document.getElementById('keyParam1').value = '',
         document.getElementById('valueParam1').value = '',
         document.getElementById('keyParam2').value = '',
