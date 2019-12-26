@@ -23,13 +23,14 @@
     <br>
     <form class="request-block">
         <div>
-            <select id="method">
+            <select id="methodId">
                 <option value="" disabled="disabled" selected="selected">Введите метод запроса</option>
                 <option value="1">POST</option>
                 <option value="2">GET</option>
             </select>
             <input type="text" placeholder="Введите url запроса" id="url" />
             <input type="button" onclick="submitForm()" value="Сохранить" />
+            <input type="button" onclick="resetForm()" value="Очистить" />
         </div>
         <br>
         <div>
@@ -54,12 +55,7 @@
         <div>
             <h3>Тело запроса</h3>
             <div>
-                <input type="text" placeholder="Ключ" id="keyBody1" />
-                <input type="text" placeholder="Значение" id="valueBody1" />
-            </div>
-            <div>
-                <input type="text" placeholder="Ключ" id="keyBody2" />
-                <input type="text" placeholder="Значение" id="valueBody2" />
+                <textarea placeholder="Тело запроса" id="body"></textarea>
             </div>
         </div>
     </form>

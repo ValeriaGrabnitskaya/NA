@@ -56,6 +56,7 @@ function getRequestById(requestId) {
 }
 
 async function runFetch(selectedRequest) {
+    let url = `https://jsonplaceholder.typicode.com/posts`;
     switch (+selectedRequest.methodId) {
         case POST:
             console.log('POST')
@@ -63,29 +64,21 @@ async function runFetch(selectedRequest) {
                 method: 'POST',
                 headers: {
                     'Content-Type': selectedRequest.contentType
-                }, 
-                body: JSON.stringify(getRequestBody(selectedRequest))
-            };
-            const proxy_post_response = await fetch(`http://localhost:7480/${selectedRequest.url}`, fetchPostOptions);
-            return createResponse(proxy_post_response, POST);
-            break;
-        case GET:
-            console.log('get');
-            const fetchGetOptions = {
-                method: 'GET',
-                headers: {
-                    Accept: selectedRequest.contentType
                 }
             };
-            let url = `http://localhost:7480/${selectedRequest.url}`;
-            if (selectedRequest.keyParam1 && selectedRequest.valueParam1) {
-                url += `?${selectedRequest.keyParam1}=${selectedRequest.valueParam1}`
-            }
-            if (selectedRequest.keyParam2 && selectedRequest.valueParam2) {
-                url += `&${selectedRequest.keyParam2}=${selectedRequest.valueParam2}`
+            const proxy_post_response = await fetch(url, fetchPostOptions);
+            return createResponse(proxy_post_response, selectedRequest);
+            break;
+        case GET:
+            console.log('GET');
+            const fetchGetOptions = {
+                method: 'GET'
+            };
+            if(selectedRequest.valueParam1 || selectedRequest.valueParam2) {
+                url += '?userId=1';
             }
             const proxy_get_response = await fetch(url, fetchGetOptions);
-            return createResponse(proxy_get_response, GET);
+            return createResponse(proxy_get_response, selectedRequest);
             break;
     }
 }
@@ -100,22 +93,20 @@ function getRequestBody(selectedRequest) {
     }
 }
 
-function createResponse(response, methodId) {
+async function createResponse(proxy_get_response, selectedRequest) {
+    let response = await proxy_get_response.json();
     return {
-        methodId: methodId,
-        url: response.url,
-        status: response.status,
-        contentType: response.headers.get('Content-Type')
+        methodId: selectedRequest.methodId,
+        url: selectedRequest.url,
+        status: proxy_get_response.status,
+        contentType: proxy_get_response.headers.get('Content-Type'),
+        body: response,
+        keyParam1: selectedRequest.keyParam1,
+        valueParam1: selectedRequest.valueParam1,
+        keyParam2: selectedRequest.keyParam2,
+        valueParam2: selectedRequest.valueParam2
     }
 }
-
-webserver.post('*', async (req, res) => {
-    res.sendStatus(200);
-});
-
-webserver.get('*', async (req, res) => {
-    res.sendStatus(200);
-});
 
 webserver.listen(port, () => {
     console.log("web server running on port " + port);
