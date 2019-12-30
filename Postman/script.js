@@ -56,7 +56,6 @@ function getRequestById(requestId) {
 }
 
 async function runFetch(selectedRequest) {
-    let url = `https://jsonplaceholder.typicode.com/posts`;
     switch (+selectedRequest.methodId) {
         case POST:
             console.log('POST')
@@ -66,16 +65,20 @@ async function runFetch(selectedRequest) {
                     'Content-Type': selectedRequest.contentType
                 }
             };
-            const proxy_post_response = await fetch(url, fetchPostOptions);
+            const proxy_post_response = await fetch(selectedRequest.url, fetchPostOptions);
             return createResponse(proxy_post_response, selectedRequest);
             break;
         case GET:
+            let url = `${selectedRequest.url}`;
             console.log('GET');
             const fetchGetOptions = {
                 method: 'GET'
             };
-            if(selectedRequest.valueParam1 || selectedRequest.valueParam2) {
-                url += '?userId=1';
+            if (selectedRequest.keyParam1 && selectedRequest.valueParam1) {
+                url += `?${selectedRequest.keyParam1}=${selectedRequest.valueParam1}`;
+            }
+            if (selectedRequest.keyParam2 || selectedRequest.valueParam2) {
+                url += `&${selectedRequest.keyParam2}=${selectedRequest.valueParam2}`;
             }
             const proxy_get_response = await fetch(url, fetchGetOptions);
             return createResponse(proxy_get_response, selectedRequest);
@@ -94,18 +97,35 @@ function getRequestBody(selectedRequest) {
 }
 
 async function createResponse(proxy_get_response, selectedRequest) {
-    let response = await proxy_get_response.json();
-    return {
+    let contentType = proxy_get_response.headers.get('Content-Type');
+    console.log(contentType)
+    let body = null;
+    switch (true) {
+        case contentType.includes('text/plain'):
+            body = await proxy_get_response.text();
+            break;
+
+        case contentType.includes('application/xml'):
+            break;
+
+        case contentType.includes('application/json'):
+            body = await proxy_get_response.json();
+            break;
+        default:
+            body = await proxy_get_response.text();
+            break;
+    }
+    return JSON.stringify({
         methodId: selectedRequest.methodId,
         url: selectedRequest.url,
         status: proxy_get_response.status,
         contentType: proxy_get_response.headers.get('Content-Type'),
-        body: response,
+        body: body,
         keyParam1: selectedRequest.keyParam1,
         valueParam1: selectedRequest.valueParam1,
         keyParam2: selectedRequest.keyParam2,
         valueParam2: selectedRequest.valueParam2
-    }
+    });
 }
 
 webserver.listen(port, () => {

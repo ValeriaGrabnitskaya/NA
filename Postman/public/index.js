@@ -28,7 +28,6 @@ async function submitForm() {
         method: "post",
         body: JSON.stringify(this.getFormData())
     };
-    console.log(JSON.stringify(this.getFormData()))
     const response = await fetch('/save-request-data', fetchOptions);
     if (response.status = 200) {
         getRequestsList();
@@ -64,13 +63,13 @@ async function executeService(requestId) {
         body: JSON.stringify({ requestId: requestId })
     };
     const response = await fetch('/run-request', fetchOptions);
-    const data = await response.text();
-    setDataToForm(JSON.parse(data));
+    const data = await response.json();
+    setDataToForm(data);
 }
 
 function setDataToForm(data) {
     for (let param in data) {
-        if (param === 'body') {
+        if (param === 'body' && data.contentType.includes('application/json')) {
             document.getElementById(`${param}`).value = parseBody(data[param]);
         } else {
             document.getElementById(`${param}`).value = data[param];

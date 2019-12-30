@@ -1,28 +1,5 @@
 {
     "data": [
-        {
-            "methodId": "1",
-            "url": "postUrl",
-            "keyParam1": "",
-            "valueParam1": "",
-            "keyParam2": "",
-            "valueParam2": "",
-            "contentType": "application/json",
-            "body": "{\n  \"amount\": 5\n}",
-            "id": 0.4429413276499432,
-            "methodName": "POST"
-        },
-        {
-            "methodId": "2",
-            "url": "getUrl",
-            "keyParam1": "amount",
-            "valueParam1": "3",
-            "keyParam2": "",
-            "valueParam2": "",
-            "contentType": "",
-            "body": "",
-            "id": 0.03623611683407435,
-            "methodName": "GET"
-        }
+
     ]
 }
