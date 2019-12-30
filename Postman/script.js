@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const fetch = require("isomorphic-fetch");
+const { check, validationResult, body } = require('express-validator');
 
 var path = require('path');
 
@@ -13,8 +14,8 @@ const POST = 1;
 const GET = 2;
 
 webserver.use(express.json());
-webserver.use(bodyParser.text());
-webserver.use(express.urlencoded({ extended: true }));
+// webserver.use(bodyParser.text());
+// webserver.use(express.urlencoded({ extended: true }));
 
 webserver.use(
     express.static(path.resolve(__dirname, "public"))
@@ -29,13 +30,35 @@ webserver.get('/requests-list', (req, res) => {
     res.send(fileContent);
 });
 
-webserver.post('/save-request-data', (req, res) => {
-    let fileContent = JSON.parse(fs.readFileSync("requsts-data.json", "utf8"));
-    var parsedData = JSON.parse(req.body);
-    fileContent.data.push(setId(parsedData))
-    fs.writeFileSync("requsts-data.json", JSON.stringify(fileContent));
-    res.send(200);
-});
+webserver.post('/save-request-data',
+    [
+        check('methodId').not().isLength({ max: 0 }).withMessage('Метод является обязательным полем'),
+        check('url').not().isLength({ max: 0 }).withMessage('Урл является обязательным полем'),
+        check('url').isURL({ protocols: ['http', 'https', 'ftp'], require_protocol: true, require_valid_protocol: true }).withMessage('Введённые данные не являются урлом')
+    ], body('keyParam1').custom((value, { req }) => {
+        if (req.body.keyParam1 && !req.body.valueParam1 || !req.body.keyParam1 && req.body.valueParam1 || req.body.keyParam2 && !req.body.valueParam2 || !req.body.keyParam2 && req.body.valueParam2) {
+            throw new Error('Для отправки параметров необходимо указать параметр и значение');
+        }
+        return true;
+    }),
+    body('contentType').custom((value, { req }) => {
+        if (value && (!value.includes('text/plain') || !value.includes('application/xml') || !value.includes('application/json'))) {
+            throw new Error('Для отправки параметров необходимо указать параметр и значение');
+        }
+        return true;
+    }),
+    (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        } else {
+            let fileContent = JSON.parse(fs.readFileSync("requsts-data.json", "utf8"));
+            var parsedData = JSON.parse(req.body);
+            fileContent.data.push(setId(parsedData))
+            fs.writeFileSync("requsts-data.json", JSON.stringify(fileContent));
+            res.send(200);
+        }
+    });
 
 function setId(parsedData) {
     parsedData.id = Math.random();

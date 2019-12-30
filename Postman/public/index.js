@@ -26,11 +26,19 @@ function resetForm() {
 async function submitForm() {
     const fetchOptions = {
         method: "post",
+        headers: {
+            'Content-Type': "application/json"
+        },
         body: JSON.stringify(this.getFormData())
     };
     const response = await fetch('/save-request-data', fetchOptions);
-    if (response.status = 200) {
-        getRequestsList();
+
+    if (response.status === 422) {
+        let errors = await response.json();
+        setErrorBlock(errors.errors);
+    }
+    if (response.status === 200) {
+        getRequestsList()
         resetForm();
     }
 }
@@ -46,6 +54,17 @@ function getFormData() {
         contentType: document.getElementById('contentType').value,
         body: document.getElementById('body').value
     }
+}
+
+function setErrorBlock(errorsArray) {
+    var errorsContainer = document.getElementById('errors');
+    errorsContainer.innerHTML = '';
+    var errorsList = '';
+
+    for (var i = 0; i < errorsArray.length; i++) {
+        errorsList += '<li style="color: red">' + errorsArray[i].msg + '</li>';
+    }
+    errorsContainer.innerHTML = errorsList;
 }
 
 function buildRequestBlock(response) {
