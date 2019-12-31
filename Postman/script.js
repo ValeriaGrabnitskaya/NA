@@ -41,20 +41,13 @@ webserver.post('/save-request-data',
         }
         return true;
     }),
-    body('contentType').custom((value, { req }) => {
-        if (value && (!value.includes('text/plain') || !value.includes('application/xml') || !value.includes('application/json'))) {
-            throw new Error('Для отправки параметров необходимо указать параметр и значение');
-        }
-        return true;
-    }),
     (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({ errors: errors.array() });
         } else {
             let fileContent = JSON.parse(fs.readFileSync("requsts-data.json", "utf8"));
-            var parsedData = JSON.parse(req.body);
-            fileContent.data.push(setId(parsedData))
+            fileContent.data.push(setId(req.body))
             fs.writeFileSync("requsts-data.json", JSON.stringify(fileContent));
             res.send(200);
         }
@@ -67,8 +60,7 @@ function setId(parsedData) {
 }
 
 webserver.post('/run-request', async (req, res) => {
-    let data = JSON.parse(req.body);
-    let selectedRequest = getRequestById(data.requestId)[0];
+    let selectedRequest = getRequestById(req.body.requestId)[0];
     const proxy_response = await runFetch(selectedRequest);
     res.send(proxy_response);
 });

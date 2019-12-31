@@ -11,6 +11,11 @@ async function getRequestsList() {
     buildRequestBlock(data);
 }
 
+function resetPage() {
+    resetForm();
+    setErrorBlock([]);
+}
+
 function resetForm() {
     document.getElementById('methodId').value = '',
         document.getElementById('url').value = '',
@@ -39,7 +44,7 @@ async function submitForm() {
     }
     if (response.status === 200) {
         getRequestsList()
-        resetForm();
+        resetPage();
     }
 }
 
@@ -79,6 +84,9 @@ function buildRequestBlock(response) {
 async function executeService(requestId) {
     const fetchOptions = {
         method: "post",
+        headers: {
+            'Content-Type': "application/json"
+        },
         body: JSON.stringify({ requestId: requestId })
     };
     const response = await fetch('/run-request', fetchOptions);
