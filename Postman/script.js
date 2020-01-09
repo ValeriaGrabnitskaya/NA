@@ -76,9 +76,7 @@ async function runFetch(selectedRequest) {
             console.log('POST')
             const fetchPostOptions = {
                 method: 'POST',
-                headers: {
-                    'Content-Type': selectedRequest.contentType
-                }
+                headers: buildRequestHeaders(selectedRequest)
             };
             const proxy_post_response = await fetch(selectedRequest.url, fetchPostOptions);
             return createResponse(proxy_post_response, selectedRequest);
@@ -101,6 +99,14 @@ async function runFetch(selectedRequest) {
     }
 }
 
+function buildRequestHeaders(selectedRequest) {
+    return {
+        'Content-Type': selectedRequest.contentType,
+        [selectedRequest.headerParam1]: selectedRequest.headerValue1,
+        [selectedRequest.headerParam2]: selectedRequest.headerValue2
+    }
+}
+
 
 function getRequestBody(selectedRequest) {
     if (+selectedRequest.methodId === POST) {
@@ -113,7 +119,9 @@ function getRequestBody(selectedRequest) {
 
 async function createResponse(proxy_get_response, selectedRequest) {
     let contentType = proxy_get_response.headers.get('Content-Type');
-    console.log(contentType)
+
+    console.log(proxy_get_response.headers)
+
     let body = null;
     switch (true) {
         case contentType.includes('text/plain'):
@@ -139,7 +147,8 @@ async function createResponse(proxy_get_response, selectedRequest) {
         keyParam1: selectedRequest.keyParam1,
         valueParam1: selectedRequest.valueParam1,
         keyParam2: selectedRequest.keyParam2,
-        valueParam2: selectedRequest.valueParam2
+        valueParam2: selectedRequest.valueParam2,
+        resHeaders: JSON.stringify(proxy_get_response.headers)
     });
 }
 

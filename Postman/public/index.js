@@ -29,12 +29,13 @@ function resetForm() {
 }
 
 async function submitForm() {
+
     const fetchOptions = {
         method: "post",
         headers: {
             'Content-Type': "application/json"
         },
-        body: JSON.stringify(this.getFormData())
+        body: JSON.stringify(this.getFormData("reqForm"))
     };
     const response = await fetch('/save-request-data', fetchOptions);
 
@@ -48,17 +49,28 @@ async function submitForm() {
     }
 }
 
-function getFormData() {
-    return {
-        methodId: document.getElementById('methodId').value,
-        url: document.getElementById('url').value,
-        keyParam1: document.getElementById('keyParam1').value,
-        valueParam1: document.getElementById('valueParam1').value,
-        keyParam2: document.getElementById('keyParam2').value,
-        valueParam2: document.getElementById('valueParam2').value,
-        contentType: document.getElementById('contentType').value,
-        body: document.getElementById('body').value
+function setFormData(formName, response) {
+    let formParams = getFormData(formName);
+    
+    let searchFormElements = document.forms[formName].elements;
+
+    for (let resParam in response) {
+        if (formParams.hasOwnProperty(resParam)) {
+            searchFormElements[resParam].value = response[resParam];
+        }
     }
+}
+
+function getFormData(formName) {
+    let searchFormElements = document.forms[formName].elements;
+    let params = {};
+
+    for (var i = 0; i < searchFormElements.length; i++) {
+        if (searchFormElements[i].name) {
+            params = { ...params, [searchFormElements[i].name]: searchFormElements[searchFormElements[i].name].value }
+        }
+    }
+    return params;
 }
 
 function setErrorBlock(errorsArray) {
@@ -91,17 +103,19 @@ async function executeService(requestId) {
     };
     const response = await fetch('/run-request', fetchOptions);
     const data = await response.json();
+    console.log(data)
     setDataToForm(data);
 }
 
 function setDataToForm(data) {
-    for (let param in data) {
-        if (param === 'body' && data.contentType.includes('application/json')) {
-            document.getElementById(`${param}`).value = parseBody(data[param]);
-        } else {
-            document.getElementById(`${param}`).value = data[param];
-        }
-    }
+    setFormData('resForm', data);
+    // for (let param in data) {
+    //     if (param === 'body' && data.contentType.includes('application/json')) {
+    //         document.getElementById(`${param}`).value = parseBody(data[param]);
+    //     } else {
+    //         document.getElementById(`${param}`).value = data[param];
+    //     }
+    // }
 }
 
 function parseBody(data) {

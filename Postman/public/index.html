@@ -21,45 +21,100 @@
     <br>
     <hr>
     <br>
-    <ul id="errors"></ul>
-    <form class="request-block">
-        <div>
-            <select id="methodId">
-                <option value="" disabled="disabled" selected="selected">Введите метод запроса</option>
-                <option value="1">POST</option>
-                <option value="2">GET</option>
-            </select>
-            <input type="text" placeholder="Введите url запроса" id="url" />
-            <input type="button" onclick="submitForm()" value="Сохранить" />
-            <input type="button" onclick="resetPage()" value="Очистить" />
-        </div>
-        <br>
-        <div>
-            <p>Статус: </p><input type="text" placeholder="Статус" id="status" />
-        </div>
-        <div>
-            <h3>Параметры</h3>
+    <div class="div-block">
+        <ul id="errors"></ul>
+        <form class="request-block" name="reqForm">
             <div>
-                <input type="text" placeholder="Ключ" id="keyParam1" />
-                <input type="text" placeholder="Значение" id="valueParam1" />
+                <select name="methodId">
+                    <option value="" disabled="disabled" selected="selected">Введите метод запроса</option>
+                    <option value="1">POST</option>
+                    <option value="2">GET</option>
+                </select>
+                <input type="text" placeholder="Введите url запроса" name="url" />
+                <input type="button" onclick="submitForm()" value="Сохранить" />
+                <input type="button" onclick="resetPage()" value="Очистить" />
             </div>
             <div>
-                <input type="text" placeholder="Ключ" id="keyParam2" />
-                <input type="text" placeholder="Значение" id="valueParam2" />
+                <h3>Параметры</h3>
+                <div>
+                    <input type="text" placeholder="Ключ" name="keyParam1" />
+                    <input type="text" placeholder="Значение" name="valueParam1" />
+                </div>
+                <div>
+                    <input type="text" placeholder="Ключ" name="keyParam2" />
+                    <input type="text" placeholder="Значение" name="valueParam2" />
+                </div>
             </div>
-        </div>
-        <br>
-        <div>
-            <label>Content-type</label>
-            <input type="text" placeholder="Введите формат тела запроса" id="contentType" />
-        </div>
-        <div>
-            <h3>Тело запроса</h3>
+            <br>
             <div>
-                <textarea placeholder="Тело запроса" id="body"></textarea>
+                <label>Content-type</label>
+                <input type="text" placeholder="Введите формат тела запроса" name="contentType" />
             </div>
-        </div>
-    </form>
+            <div>
+                <h3>Заголовки запроса</h3>
+                <div>
+                    <input type="text" placeholder="Ключ" name="headerParam1" />
+                    <input type="text" placeholder="Значение" name="headerValue1" />
+                </div>
+                <div>
+                    <input type="text" placeholder="Ключ" name="headerParam2" />
+                    <input type="text" placeholder="Значение" name="headerValue2" />
+                </div>
+            </div>
+            <div>
+                <h3>Тело запроса</h3>
+                <div>
+                    <textarea placeholder="Тело запроса" name="body"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="div-block">
+        <ul id="errors2"></ul>
+        <form name="resForm">
+            <div>
+                <select name="methodId">
+                    <option value="" disabled="disabled" selected="selected">Метод запроса</option>
+                    <option value="1">POST</option>
+                    <option value="2">GET</option>
+                </select>
+                <input type="text" placeholder="url запроса" name="url" />
+                <input type="button" onclick="resetPage()" value="Очистить" />
+            </div>
+            <br>
+            <div>
+                <p>Статус: </p><input type="text" placeholder="Статус" name="status" />
+            </div>
+            <div>
+                <h3>Параметры</h3>
+                <div>
+                    <input type="text" placeholder="Ключ" name="keyParam1" />
+                    <input type="text" placeholder="Значение" name="valueParam1" />
+                </div>
+                <div>
+                    <input type="text" placeholder="Ключ" name="keyParam2" />
+                    <input type="text" placeholder="Значение" name="valueParam2" />
+                </div>
+            </div>
+            <br>
+            <div>
+                <label>Content-type</label>
+                <input type="text" placeholder="Введите формат тела запроса" name="contentType" />
+            </div>
+            <div>
+                <h3>Заголовки ответа</h3>
+                <div>
+                    <textarea placeholder="Тело ответа" name="resHeaders"></textarea>
+                </div>
+            </div>
+            <div>
+                <h3>Тело ответа</h3>
+                <div>
+                    <textarea placeholder="Тело ответа" name="body"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
 
 </html>
