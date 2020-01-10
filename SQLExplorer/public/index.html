@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>SQLExplorer</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="index.js"></script>
+</head>
+
+<body onload="getDatabases()">
+    <div>
+        <select id="databases" onchange="onSelectDatabase()"></select>
+        <input type="button" value="Выполнить" onclick="execute()" /><br><br>
+        <textarea style="width: 1000px; height: 200px" id="sqlRequest"></textarea>
+    </div>
+    <br>
+    <div id="sqlResponse"></div>
+    <br>
+    <hr>
+    <div id="actionOutput"></div>
+</body>
+
+</html>
