@@ -6,9 +6,9 @@ async function getDatabases() {
     };
 
     const response = await fetch('/get-databases', fetchOptions);
+    
     if (response.ok) {
         const data = await response.json();
-        console.log(data)
 
         let res = `<option value="" disabled="disabled" selected="selected">Выберите базу для работы</option>`;
         data.forEach((row) => {
@@ -51,10 +51,9 @@ async function execute() {
     };
 
     const response = await fetch('/execute-sql', fetchOptions);
+    const data = await response.json();
+
     if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        console.log(data.fields);
 
         // header
         if (data.fields && data.results) {
@@ -81,9 +80,11 @@ async function execute() {
             document.getElementById('sqlResponse').innerHTML = table;
         }
 
-        addLog(`Количество выбранных строк: ${data.rowCount};`);
+        if (data.rowCount) {
+            addLog(`Количество выбранных/изменённых строк: ${data.rowCount};`);
+        }
     } else {
-        addLog(`ошибка чтения данны`)
+        addLog(`${data.sqlMessage}`)
     }
 }
 

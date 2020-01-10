@@ -31,7 +31,7 @@ webserver.get('/get-databases', (req, res) => {
         connection = mysql.createConnection(connectionConfig);
         connection.connect();
         connection.query(
-            'SHOW DATABASES' 
+            'SHOW DATABASES'
             , (error, results, fields) => {
                 if (error) {
                     res.status(500).end();
@@ -63,7 +63,7 @@ webserver.post('/use-database', (req, res) => {
                 }
                 else {
                     connectionConfig.database = req.body.database;
-                    res.send({database: req.body.database});
+                    res.send({ database: req.body.database });
                 }
                 connection.end();
             });
@@ -78,6 +78,7 @@ webserver.post('/use-database', (req, res) => {
 webserver.post('/execute-sql', (req, res) => {
     console.log('/execute-sql');
     let connection = null;
+
     try {
         connection = mysql.createConnection(connectionConfig);
         connection.connect();
@@ -85,16 +86,20 @@ webserver.post('/execute-sql', (req, res) => {
             req.body.sql
             , (error, results, fields) => {
                 if (error) {
-                    res.status(500).end();
+                    res.status(500).send({ sqlMessage: error.sqlMessage });
                 }
                 else {
-                    let mapFields = fields.map(row => ({ fieldName: row.name }));
-                    
-                    res.send({
-                        results: results,
-                        fields: mapFields,
-                        rowCount: results.length
-                    });
+                    let isUpdate = /UPDATE/i.test(req.body.sql);
+
+                    if (isUpdate) {
+                        getRowCount(connection, res);
+                    } else {
+                        res.send({
+                            results: fields && results ? results : [],
+                            fields: fields && results ? fields.map(row => ({ fieldName: row.name })) : [],
+                            rowCount: results ? results.length : null
+                        });
+                    }
                 }
                 connection.end();
             });
@@ -105,6 +110,27 @@ webserver.post('/execute-sql', (req, res) => {
             connection.end();
     }
 });
+
+function getRowCount(connection, res) {
+    console.log('getRowCount');
+    try {
+        connection.query(
+            'SELECT ROW_COUNT();'
+            , (error, results, fields) => {
+                if (error) {
+                    return res.send({ sqlMessage: error.sqlMessage })
+                }
+                else {
+                    res.send({
+                        rowCount: results[0]['ROW_COUNT()']
+                    });
+                }
+            });
+    }
+    catch (error) {
+        return null;
+    }
+}
 
 webserver.listen(port, () => {
     console.log("web server running on port " + port);
