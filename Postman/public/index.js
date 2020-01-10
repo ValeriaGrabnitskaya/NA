@@ -11,21 +11,19 @@ async function getRequestsList() {
     buildRequestBlock(data);
 }
 
-function resetPage() {
-    resetForm();
+function resetPage(formName) {
+    resetForm(formName);
     setErrorBlock([]);
 }
 
-function resetForm() {
-    document.getElementById('methodId').value = '',
-        document.getElementById('url').value = '',
-        document.getElementById('status').value = '',
-        document.getElementById('keyParam1').value = '',
-        document.getElementById('valueParam1').value = '',
-        document.getElementById('keyParam2').value = '',
-        document.getElementById('valueParam2').value = '',
-        document.getElementById('contentType').value = '',
-        document.getElementById('body').value = ''
+function resetForm(formName) {
+    let searchFormElements = document.forms[formName].elements;
+
+    for (var i = 0; i < searchFormElements.length; i++) {
+        if (searchFormElements[i].name && searchFormElements[searchFormElements[i].name].value) {
+            searchFormElements[searchFormElements[i].name].value = ''
+        }
+    }
 }
 
 async function submitForm() {
@@ -51,14 +49,26 @@ async function submitForm() {
 
 function setFormData(formName, response) {
     let formParams = getFormData(formName);
-    
+
     let searchFormElements = document.forms[formName].elements;
 
     for (let resParam in response) {
         if (formParams.hasOwnProperty(resParam)) {
-            searchFormElements[resParam].value = response[resParam];
+            if (resParam === 'resHeaders') {
+                searchFormElements[resParam].value = mapResHeaders(response[resParam]);
+            } else {
+                searchFormElements[resParam].value = response[resParam];
+            }
         }
     }
+}
+
+function mapResHeaders(resHeaders) {
+    let str = '';
+    for (let [key, value] of Object.entries(resHeaders)) {
+        str += `${key}: ${value};\n\n`;
+    }
+    return str;
 }
 
 function getFormData(formName) {
@@ -103,19 +113,7 @@ async function executeService(requestId) {
     };
     const response = await fetch('/run-request', fetchOptions);
     const data = await response.json();
-    console.log(data)
-    setDataToForm(data);
-}
-
-function setDataToForm(data) {
     setFormData('resForm', data);
-    // for (let param in data) {
-    //     if (param === 'body' && data.contentType.includes('application/json')) {
-    //         document.getElementById(`${param}`).value = parseBody(data[param]);
-    //     } else {
-    //         document.getElementById(`${param}`).value = data[param];
-    //     }
-    // }
 }
 
 function parseBody(data) {

@@ -73,7 +73,6 @@ function getRequestById(requestId) {
 async function runFetch(selectedRequest) {
     switch (+selectedRequest.methodId) {
         case POST:
-            console.log('POST')
             const fetchPostOptions = {
                 method: 'POST',
                 headers: buildRequestHeaders(selectedRequest)
@@ -83,7 +82,6 @@ async function runFetch(selectedRequest) {
             break;
         case GET:
             let url = `${selectedRequest.url}`;
-            console.log('GET');
             const fetchGetOptions = {
                 method: 'GET'
             };
@@ -107,20 +105,8 @@ function buildRequestHeaders(selectedRequest) {
     }
 }
 
-
-function getRequestBody(selectedRequest) {
-    if (+selectedRequest.methodId === POST) {
-        return {
-            [selectedRequest.keyBody1]: selectedRequest.valueBody1,
-            [selectedRequest.keyBody2]: selectedRequest.valueBody2
-        }
-    }
-}
-
 async function createResponse(proxy_get_response, selectedRequest) {
     let contentType = proxy_get_response.headers.get('Content-Type');
-
-    console.log(proxy_get_response.headers)
 
     let body = null;
     switch (true) {
@@ -148,7 +134,13 @@ async function createResponse(proxy_get_response, selectedRequest) {
         valueParam1: selectedRequest.valueParam1,
         keyParam2: selectedRequest.keyParam2,
         valueParam2: selectedRequest.valueParam2,
-        resHeaders: JSON.stringify(proxy_get_response.headers)
+        resHeaders: {
+            server: proxy_get_response.headers.get('server'),
+            date: proxy_get_response.headers.get('date'),
+            connection: proxy_get_response.headers.get('connection'),
+            vary: proxy_get_response.headers.get('vary'),
+            link: proxy_get_response.headers.get('link')
+        }
     });
 }
 
