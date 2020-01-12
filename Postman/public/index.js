@@ -43,7 +43,7 @@ async function submitForm() {
     }
     if (response.status === 200) {
         getRequestsList()
-        resetPage();
+        resetPage('reqForm');
     }
 }
 
