@@ -1,0 +1,20 @@
+<form name="resForm">
+    {{> baseUrlInfo}}
+    <br>
+    <div>
+        <p>Статус: </p><input type="text" placeholder="Статус" name="status" />
+    </div>
+    {{> commonInputData}}
+    <div>
+        <h3>Заголовки ответа</h3>
+        <div>
+            <textarea placeholder="Тело ответа" name="resHeaders"></textarea>
+        </div>
+    </div>
+    <div>
+        <h3>Тело ответа</h3>
+        <div>
+            <textarea placeholder="Тело ответа" name="body"></textarea>
+        </div>
+    </div>
+</form>

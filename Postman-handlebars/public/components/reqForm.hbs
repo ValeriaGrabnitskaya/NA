@@ -1,0 +1,21 @@
+<form class="request-block" name="reqForm">
+    {{> baseUrlInfo withSave="true"}}
+    {{> commonInputData}}
+    <div>
+        <h3>Заголовки запроса</h3>
+        <div>
+            <input type="text" placeholder="Ключ" name="headerParam1" />
+            <input type="text" placeholder="Значение" name="headerValue1" />
+        </div>
+        <div>
+            <input type="text" placeholder="Ключ" name="headerParam2" />
+            <input type="text" placeholder="Значение" name="headerValue2" />
+        </div>
+    </div>
+    <div>
+        <h3>Тело запроса</h3>
+        <div>
+            <textarea placeholder="Тело запроса" name="body"></textarea>
+        </div>
+    </div>
+</form>

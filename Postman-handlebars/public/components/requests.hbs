@@ -1,0 +1,13 @@
+<table>
+    <caption>Запросы</caption>
+    <tr>
+        <th>Метод</th>
+        <th>Урл</th>
+        <th>Действие</th>
+    </tr>
+    <tbody>
+        {{#each requests}}
+        <tr><td>{{methodName}}</td><td>{{url}}</td><td><input type="button" value="Отправить" onclick="executeService({{id}})"/></td></tr>
+        {{/each}}
+    </tbody>
+</table>
