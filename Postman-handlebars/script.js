@@ -4,6 +4,8 @@ const fs = require('fs');
 const fetch = require("isomorphic-fetch");
 const hbs = require("hbs");
 
+import { checkInputData } from "./assert-validation/checkInputData";
+
 const webserver = express();
 
 const port = 7480;
@@ -32,10 +34,17 @@ webserver.get('/main-page', (req, res) => {
 });
 
 webserver.post('/save-request-data', async (req, res) => {
-    let fileContent = JSON.parse(fs.readFileSync("requsts-data.json", "utf8"));
-    fileContent.data.push(setId(req.body))
-    fs.writeFileSync("requsts-data.json", JSON.stringify(fileContent));
-    res.sendStatus(200);
+    const message = checkInputData(req.body);
+    if (!message) {
+        let fileContent = JSON.parse(fs.readFileSync("requsts-data.json", "utf8"));
+        fileContent.data.push(setId(req.body))
+        fs.writeFileSync("requsts-data.json", JSON.stringify(fileContent));
+        res.sendStatus(200);
+    }
+    else {
+        return res.status(400).send({ message: message });
+    }
+
 });
 
 function setId(parsedData) {

@@ -6,9 +6,14 @@
     </select>
     <input type="text" placeholder="Url запроса" name="url" />
 
-    {{#if withSave}}
+    {{#if reqForm}}
     <input type="button" onclick="submitForm()" value="Сохранить" />
     {{/if}}
-    
-    <input type="button" onclick="resetPage('reqForm')" value="Очистить" />
+
+    {{#if reqForm}}
+    <input type="button" onclick="submitForm('reqForm')" value="Сохранить" />
+    {{else}}
+    <input type="button" onclick="resetPage('resForm')" value="Очистить" />
+    {{/if}}
+
 </div>
