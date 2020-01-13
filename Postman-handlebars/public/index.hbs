@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Postman-handlebars</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script src="index.js"></script>
+</head>
+
+<body>
+    {{> requests}}
+    <br>
+    <hr>
+    <br>
+    <div class="div-block">
+        {{> errors}}
+        {{> reqForm}}
+    </div>
+    <div class="div-block" style="margin-top: 16px">
+        {{> resForm}}
+    </div>
+</body>
+
+</html>

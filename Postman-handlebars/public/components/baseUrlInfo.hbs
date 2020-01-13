@@ -1,0 +1,14 @@
+<div>
+    <select name="methodId">
+        <option value="" disabled="disabled" selected="selected">Метод запроса</option>
+        <option value="1">POST</option>
+        <option value="2">GET</option>
+    </select>
+    <input type="text" placeholder="Url запроса" name="url" />
+
+    {{#if withSave}}
+    <input type="button" onclick="submitForm()" value="Сохранить" />
+    {{/if}}
+    
+    <input type="button" onclick="resetPage('reqForm')" value="Очистить" />
+</div>
