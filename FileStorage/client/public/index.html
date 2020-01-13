@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Postman</title>
+    <!-- <link rel="stylesheet" type="text/css" href="index.css"> -->
+    <script src="index.js"></script>
+</head>
+
+<body onload="firstLoad()">
+
+    <form action="http://nodearch.e-learning.by:3550/service5" method=post enctype='multipart/form-data' target=example>
+        <input type="hidden" name='internalnum' value=555>
+        <input type="file" name='photo'><br />
+        <textarea type="text" name='comment'></textarea><br />
+        <input type=submit value="Загрузить">
+    </form>
+
+</body>
+
+</html>
