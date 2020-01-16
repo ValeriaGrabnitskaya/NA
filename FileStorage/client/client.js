@@ -9,9 +9,9 @@ webserver.use(
     express.static(path.resolve(__dirname, "public"))
 );
 
-// webserver.get('/main-page', (req, res) => {
-//     res.sendFile(path.join(__dirname + '/client/public/index.html'));
-// });
+webserver.get('/main-page', (req, res) => {
+    res.sendFile(path.join(__dirname + '/public/index.html'));
+});
 
 webserver.listen(port, () => {
     console.log("web server running on port " + port)
